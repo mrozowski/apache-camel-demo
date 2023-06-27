@@ -1,0 +1,3 @@
+reservation:
+  date:
+    date-format: "yyyy.MM.dd"

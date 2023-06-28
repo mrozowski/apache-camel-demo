@@ -1,3 +1,6 @@
 reservation:
   date:
     date-format: "yyyy.MM.dd"
+  storage:
+    roomReservationPath: "src/test/resources/reservation"
+    rooms: ["1", "2", "3", "4"]

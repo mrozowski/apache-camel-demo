@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Builder
 public record ReservationCommand(String name,
                                  String surname,
-                                 int roomId,
+                                 String roomId,
                                  LocalDate reservationDate,
                                  int numberOfDays) {
 }

@@ -19,7 +19,7 @@ class ReservationControllerSpec extends Specification {
 
     def "reserve should return OK with the reservation ID"() {
         given:
-        def request = new ReservationRequest(name: "John", surname: "Doe", room: 123, days: 3, date: "03.05.2023")
+        def request = new ReservationRequest(name: "John", surname: "Doe", room: "123", days: 3, date: "03.05.2023")
         def dateTime = LocalDate.of(2023, 5, 3);
         def command = ReservationCommand.builder()
                 .name(request.getName())

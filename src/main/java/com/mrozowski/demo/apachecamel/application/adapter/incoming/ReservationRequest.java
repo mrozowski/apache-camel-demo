@@ -9,7 +9,7 @@ class ReservationRequest {
 
   private String name;
   private String surname;
-  private int room;
+  private String room;
   private String date;
   private int days;
 }

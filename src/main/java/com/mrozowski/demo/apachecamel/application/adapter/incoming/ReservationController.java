@@ -21,6 +21,7 @@ class ReservationController {
 
   @PostMapping("/room")
   ResponseEntity<String> reserve(@RequestBody ReservationRequest request) {
+    log.info("Receive request to reserve room");
     return ResponseEntity.ok().body(reservationFacade.reserve(toCommand(request)));
   }
 

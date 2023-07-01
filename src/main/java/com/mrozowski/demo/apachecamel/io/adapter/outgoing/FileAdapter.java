@@ -64,7 +64,7 @@ class FileAdapter implements ReservationRepository {
 
   private void appendToFile(String filePath, ReservationCsvFile content) {
     try (var file = new FileOutputStream(filePath, true)) {
-      var csvSchema = csvMapper.schemaFor(ReservationCsvFile.class);
+      var csvSchema = csvMapper.schemaFor(ReservationCsvFile.class).withoutQuoteChar() ;
       var writer = csvMapper
           .writer(csvSchema)
           .withDefaultPrettyPrinter();

@@ -13,4 +13,8 @@ public record Day(String date, boolean isAvailable) {
   public static Day of(String day, boolean isAvailable) {
     return new Day(day, isAvailable);
   }
+
+  public boolean isOccupied(){
+    return !isAvailable;
+  }
 }

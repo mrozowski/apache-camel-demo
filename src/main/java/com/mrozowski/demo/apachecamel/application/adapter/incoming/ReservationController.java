@@ -24,14 +24,14 @@ class ReservationController {
 
   @PostMapping("/room")
   ResponseEntity<String> reserve(@RequestBody ReservationRequest request) {
-    log.info("Receive request to reserve room");
+    log.info("Receive request to reserve room [{}]", request.getRoom());
     return ResponseEntity.ok().body(reservationFacade.reserve(toReservationCommand(request)));
   }
 
   @GetMapping("/available")
-  ResponseEntity<AvailabilityResponse> isAvailable(@RequestParam String dateFrom, @RequestParam String dateTo,
-                                                   @RequestParam String roomId) {
-    log.info("Receive request to check availability");
+  ResponseEntity<AvailabilityResponse> isAvailable(
+      @RequestParam String dateFrom, @RequestParam String dateTo, @RequestParam String roomId) {
+    log.info("Receive request to check availability for room [{}], and date [{} - {}]", roomId, dateFrom, dateTo);
     var days = reservationFacade.checkAvailable(toAvailabilityCommand(dateFrom, dateTo, roomId));
     return ResponseEntity.ok().body(toAvailabilityResponse(days, dateFrom, dateTo, roomId));
   }
@@ -71,5 +71,10 @@ class ReservationController {
   @ExceptionHandler(DateTimeParseException.class)
   ResponseEntity<String> handleIDateTimeParseException(DateTimeParseException ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid date format");
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  ResponseEntity<String> handleIIllegalArgumentException(IllegalArgumentException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
 }

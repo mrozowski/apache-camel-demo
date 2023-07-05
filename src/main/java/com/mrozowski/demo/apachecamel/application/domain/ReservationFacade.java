@@ -16,6 +16,18 @@ public class ReservationFacade {
 
   public String reserve(ReservationCommand command) {
     log.info("Reservation received");
+    var dateTo = command.reservationDate().plusDays(command.numberOfDays()).toString();
+    var dateFrom = command.reservationDate().toString();
+    var days = reservation.checkAvailability(AvailabilityCommand.builder()
+        .roomId(command.roomId())
+        .dateFrom(dateFrom)
+        .dateTo(dateTo)
+        .build());
+    if (days.stream().anyMatch(Day::isOccupied)) {
+      log.warn("Could not reserve room [{}] for date [{} - {}]", command.roomId(), dateFrom, dateTo);
+      throw new IllegalArgumentException(
+          "Room with id [%s] is occupied for date [%s - %s]".formatted(command.roomId(), dateFrom, dateTo));
+    }
     return reservation.reserve(command);
   }
 

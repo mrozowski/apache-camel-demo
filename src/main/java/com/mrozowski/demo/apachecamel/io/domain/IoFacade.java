@@ -12,12 +12,12 @@ public class IoFacade {
   private final ReservationService reservationService;
 
   public String save(SaveReservationCommand command) {
-    log.info("Received data to save [{}]", command);
+    log.debug("Received data to save [{}]", command);
     return reservationService.save(command);
   }
 
   public AvailabilityInformation checkAvailability(AvailabilityCheckCommand availabilityCheckCommand) {
-    log.info("Received request to check availability [{}]", availabilityCheckCommand);
+    log.debug("Received request to check availability [{}]", availabilityCheckCommand);
     return reservationService.checkAvailability(availabilityCheckCommand);
   }
 }

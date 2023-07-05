@@ -15,4 +15,9 @@ public class IoFacade {
     log.info("Received data to save [{}]", command);
     return reservationService.save(command);
   }
+
+  public AvailabilityInformation checkAvailability(AvailabilityCheckCommand availabilityCheckCommand) {
+    log.info("Received request to check availability [{}]", availabilityCheckCommand);
+    return reservationService.checkAvailability(availabilityCheckCommand);
+  }
 }

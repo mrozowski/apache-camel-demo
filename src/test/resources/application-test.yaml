@@ -1,0 +1,4 @@
+reservation:
+  storage:
+    roomReservationPath: "src/test/resources/reservation/test"
+    rooms: ["1", "2", "3", "4"]

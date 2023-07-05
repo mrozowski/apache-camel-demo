@@ -11,10 +11,14 @@ import java.util.UUID;
 class ReservationService {
 
   private final ReservationRepository reservationRepository;
-  String save(SaveReservationCommand command) {
 
+  String save(SaveReservationCommand command) {
     var id = UUID.randomUUID().toString();
     reservationRepository.save(id, command);
     return id;
+  }
+
+  AvailabilityInformation checkAvailability(AvailabilityCheckCommand command) {
+    return reservationRepository.availability(command);
   }
 }

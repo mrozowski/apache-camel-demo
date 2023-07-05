@@ -1,5 +1,7 @@
 package com.mrozowski.demo.apachecamel.application.adapter.incoming;
 
+import com.mrozowski.demo.apachecamel.application.domain.AvailabilityCommand;
+import com.mrozowski.demo.apachecamel.application.domain.Day;
 import com.mrozowski.demo.apachecamel.application.domain.ReservationCommand;
 import com.mrozowski.demo.apachecamel.application.domain.ReservationFacade;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,10 +25,35 @@ class ReservationController {
   @PostMapping("/room")
   ResponseEntity<String> reserve(@RequestBody ReservationRequest request) {
     log.info("Receive request to reserve room");
-    return ResponseEntity.ok().body(reservationFacade.reserve(toCommand(request)));
+    return ResponseEntity.ok().body(reservationFacade.reserve(toReservationCommand(request)));
   }
 
-  private ReservationCommand toCommand(ReservationRequest request) {
+  @GetMapping("/available")
+  ResponseEntity<AvailabilityResponse> isAvailable(@RequestParam String dateFrom, @RequestParam String dateTo,
+                                                   @RequestParam String roomId) {
+    log.info("Receive request to check availability");
+    var days = reservationFacade.checkAvailable(toAvailabilityCommand(dateFrom, dateTo, roomId));
+    return ResponseEntity.ok().body(toAvailabilityResponse(days, dateFrom, dateTo, roomId));
+  }
+
+  private AvailabilityResponse toAvailabilityResponse(List<Day> days, String from, String to, String roomId) {
+    return AvailabilityResponse.builder()
+        .from(from)
+        .to(to)
+        .roomId(roomId)
+        .days(days.stream().map(ReservationController::toDayAvailability).toList())
+        .build();
+  }
+
+  private AvailabilityCommand toAvailabilityCommand(String dateFrom, String dateTo, String roomId) {
+    return AvailabilityCommand.builder()
+        .dateFrom(dateFrom)
+        .dateTo(dateTo)
+        .roomId(roomId)
+        .build();
+  }
+
+  private ReservationCommand toReservationCommand(ReservationRequest request) {
     return ReservationCommand.builder()
         .name(request.getName())
         .surname(request.getSurname())
@@ -34,6 +62,11 @@ class ReservationController {
         .numberOfDays(request.getDays())
         .build();
   }
+
+  private static AvailabilityResponse.DayAvailability toDayAvailability(Day day) {
+    return AvailabilityResponse.DayAvailability.of(day.date(), day.isAvailable());
+  }
+
 
   @ExceptionHandler(DateTimeParseException.class)
   ResponseEntity<String> handleIDateTimeParseException(DateTimeParseException ex) {

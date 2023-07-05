@@ -11,12 +11,17 @@ import java.time.LocalDate
 
 class FileAdapterSpec extends Specification {
 
-  private static final String PATH = "src/test/resources/reservation"
+  private static final String PATH = "src/test/resources/reservation/test"
   def properties = new FileProperties(PATH, ["1", "2"])
   def csvMapper = new CsvMapper()
 
   @Subject
   def underTest = new FileAdapter(properties, csvMapper)
+
+  def setupSpec() {
+    // Run once to make sure test directory exists
+    new File(PATH).mkdirs()
+  }
 
   def "should create files if they do not exist and save reservation"() {
     given:
@@ -38,7 +43,7 @@ class FileAdapterSpec extends Specification {
     then:
     assertFileExist("room_1.csv")
     assertFileExist("room_2.csv")
-    assertFileContainsRow("room_1.csv", "someId,Marek,Johnson,2023-05-15,2023-05-17")
+    assertFileContainsRow("room_1.csv", "someId,Marek,Johnson,2023-05-15,2023-05-17,CONFIRMED")
   }
 
   def cleanup() {

@@ -1,4 +1,4 @@
-# reservation-demo
+# Reservation-demo
 Simple reservation system for hotel. 
 ![Hexagonal architecture - Camel project](https://github.com/mrozowski/reservation-demo/assets/67066372/afab1a2a-bcda-4434-958b-792729d2d370)
 
